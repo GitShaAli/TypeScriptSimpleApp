@@ -3,6 +3,8 @@ import { Router } from "express";
 
 import { Todo } from "../models/todo";
 
+type RequestBody = {text:string};
+
 let todos:Todo[] = [];
 
 const router = Router();
@@ -12,9 +14,10 @@ router.get('/',(req,res,next)=>{
 })
 
 router.post('/todo',(req,res,next)=>{
+    const body = req.body as RequestBody;
     const newTodo:Todo={
         id:new Date().toISOString(),
-        text:req.body.text
+        text:body.text
     };
     todos.push(newTodo);
     res.status(200).json({todos:todos});
@@ -31,8 +34,9 @@ router.post('/todo/delete',(req,res,next)=>{
 })
 
 router.post('/todo/edit',(req,res,next)=>{
+    const body = req.body as RequestBody;
     const reqId = req.body.id;
-    const newItem = req.body.text;
+    const newItem = body.text;
     let entry = todos.findIndex((item)=>item.id===reqId);
     if(entry>=0){
         todos[entry] = {id:reqId,text:newItem};

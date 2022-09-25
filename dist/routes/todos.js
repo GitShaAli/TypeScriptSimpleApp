@@ -7,9 +7,10 @@ router.get('/', (req, res, next) => {
     res.status(200).json({ todos: todos });
 });
 router.post('/todo', (req, res, next) => {
+    const body = req.body;
     const newTodo = {
         id: new Date().toISOString(),
-        text: req.body.text
+        text: body.text
     };
     todos.push(newTodo);
     res.status(200).json({ todos: todos });
@@ -25,8 +26,9 @@ router.post('/todo/delete', (req, res, next) => {
         res.status(404).json({ "Error": "Not Found" });
 });
 router.post('/todo/edit', (req, res, next) => {
+    const body = req.body;
     const reqId = req.body.id;
-    const newItem = req.body.text;
+    const newItem = body.text;
     let entry = todos.findIndex((item) => item.id === reqId);
     if (entry >= 0) {
         todos[entry] = { id: reqId, text: newItem };
